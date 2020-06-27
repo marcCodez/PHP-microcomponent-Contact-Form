@@ -1,9 +1,32 @@
 <?php
+    // Message Variables
+    $msg = '';
+    $msgClass = '';
     // Check For submit
     if(filter_has_var(INPUT_POST, 'submit')){
-        echo 'Submitted';
-    }
+        // Get form Data
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $message = $_POST['message'];
 
+        // Check Required Fields
+        if(!empty($email) && !empty($name) && !empty($message)){
+            // Passed
+            // Check email
+            if(filter_var($email, FILTER_VALIDATE_EMAIL) === false){
+                // Failed
+                $msg = 'Please use a valid email';
+                $msgClass = 'alert-danger';
+            } else {
+                // Passed
+                echo 'PASSED';
+            }
+        } else {
+            // Failed
+            $msg = 'Please fill in all fields';
+            $msgClass = 'alert-danger';
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,6 +46,9 @@
 </div>
 </nav>
 <div class="container">
+        <?php if($msg != ''): ?>
+            <div class="alert <?php echo $msgClass; ?>"><?php echo $msg; ?></div>
+        <?php endif; ?>
     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
         <div class="form-group">
             <label>Name</label>
